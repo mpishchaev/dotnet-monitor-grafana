@@ -1,4 +1,4 @@
-# Configuring dotnet-monitor with Prometheus and Grafana
+# dotnet-monitor with Prometheus and Grafana
 Inspired by: https://dotnetos.org/blog/2021-11-22-dotnet-monitor-grafana/ </br>
 Memory apps was taken and upgraded from: https://github.com/sebastienros/memoryleak
 
