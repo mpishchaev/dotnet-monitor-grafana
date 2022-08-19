@@ -1,19 +1,22 @@
-# syntax=docker/dockerfile:1
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
+EXPOSE 80
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet restore
-RUN dotnet publish -c Release -o out
+COPY "MemoryLeak/MemoryLeak.sln" "MemoryLeak/MemoryLeak.sln"
+COPY "MemoryLeak/MemoryLeak/MemoryLeak.csproj" "MemoryLeak/MemoryLeak/MemoryLeak.csproj"
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-RUN apt-get update && apt-get install -y procps
+RUN dotnet restore "MemoryLeak/MemoryLeak.sln"
+
+COPY . .
+WORKDIR /src/MemoryLeak/MemoryLeak
+RUN dotnet publish --no-restore -c Release -o /app
+
+FROM build AS publish
+FROM base AS final
+
 WORKDIR /app
-COPY --from=build-env /app/out .
+COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "MemoryLeak.dll"]

@@ -1,0 +1,54 @@
+version: '3.5'
+
+services:
+  memoryleak:
+    build:
+      context: .
+      dockerfile: MemoryLeak/MemoryLeak/Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - memoryleak
+    volumes:
+      - memoryleak-temp:/tmp
+
+  monitor:
+    image: mcr.microsoft.com/dotnet/monitor:6
+    command: [ "-u http://*:52323", "--no-auth" ]
+    ports:
+      - "52323:52323"
+    volumes:
+      - memoryleak-temp:/tmp
+    networks:
+      - memoryleak
+
+  prometheus:
+    image: ubuntu/prometheus
+    volumes:
+      - ./prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    environment:
+      - TZ=UTC
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - 30090:9090
+    networks:
+      - memoryleak
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_DEFAULT_INSTANCE_NAME=http://host.docker.internal:30090/
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+networks:
+  memoryleak:
+    driver: bridge
+
+volumes:
+    memoryleak-temp: {}
+    prometheus_data: {}

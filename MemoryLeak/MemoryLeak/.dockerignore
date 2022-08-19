@@ -1,2 +1,14 @@
-bin/
-obj/
+.dockerignore
+.git
+.gitignore
+.vs
+.vscode
+**/*.*proj.user
+**/azds.yaml
+**/bin
+**/charts
+**/Dockerfile
+**/Dockerfile.develop
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml

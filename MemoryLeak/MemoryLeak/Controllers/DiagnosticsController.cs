@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MemoryLeak.Controllers
 {
     [Route("api")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class DiagnosticsController : ControllerBase
     {
         private static Process _process = Process.GetCurrentProcess();
