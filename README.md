@@ -1,6 +1,10 @@
 # dotnet-monitor with Prometheus and Grafana
-Inspired by: https://dotnetos.org/blog/2021-11-22-dotnet-monitor-grafana/ </br>
-Memory apps was taken and upgraded from: https://github.com/sebastienros/memoryleak </br>
+Inspired by:
+ * https://dotnetos.org/blog/2021-11-22-dotnet-monitor-grafana/
+ * https://habr.com/ru/company/sdventures/blog/653277/
+
+Memory apps was taken and upgraded from: https://github.com/sebastienros/memoryleak
+
 The fresh version of dotnet monitor was announced here: https://devblogs.microsoft.com/dotnet/announcing-dotnet-monitor-in-net-6/
 
 ## Required apps:
@@ -16,13 +20,7 @@ It builds the test application as a docker image, pulls the required images from
 ## Application launched by docker has following urls:
   * Memory leaks application: http://localhost:8080/
   * Dotnet monitor: http://localhost:52323
-    Here is the list of the endpoints in the monitor apps:
-    * http://localhost:52323/processes
-    * http://localhost:52323/metrics
-    * http://localhost:52323/dump/{pid?}
-    * http://localhost:52323/gcdump/{pid?}
-    * http://localhost:52323/trace/{pid?}
-    * http://localhost:52323/logs/{pid?}
+    Here is the list of the endpoints in the monitor apps: https://github.com/dotnet/dotnet-monitor/tree/main/documentation
   * Prometheus: http://localhost:9090/
   * Grafana: http://localhost:3000/
 
