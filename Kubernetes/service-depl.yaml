@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-deployment
+  labels:
+    app: MemoryLeak
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+     app: service-deployment
+  template:
+    metadata:
+      labels:
+        app: service-deployment
+    spec:
+      volumes:
+        - name: memoryleak-temp          
+          emptyDir: {}
+      shareProcessNamespace: true
+      containers:
+        - name: service-memoryleak
+          image: fenixvrn/memoryleak:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: memoryleak-temp
+              mountPath: /tmp              
+        - name: sidecar-monitor
+          image: mcr.microsoft.com/dotnet/monitor:6
+          ports:
+            - containerPort: 52323
+          args: [ "-u http://*:52323", "--no-auth" ]
+          volumeMounts:            
+            - name: memoryleak-temp
+              mountPath: /tmp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: service-deployment
+  ports:
+  - name: service-memoryleak
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  - name: sidecar-monitor
+    protocol: TCP
+    port: 52323
+    targetPort: 52323
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-deployment
+  ports:
+  - name: service-memoryleak
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  - name: sidecar-monitor
+    protocol: TCP
+    port: 52323
+    targetPort: 52323

@@ -3,7 +3,7 @@ version: '3.5'
 services:
   memoryleak:
     build:
-      context: .
+      context: ./MemoryLeak/
       dockerfile: MemoryLeak/MemoryLeak/Dockerfile
     ports:
       - "8080:80"
