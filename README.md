@@ -39,9 +39,10 @@ docker push <your_registry_name>/memoryleak
   * Go to Dashboards/Import and upload .\Grafana\sample-dotnet-monitor-dashboard.json 
   * Finally open http://localhost:8080/docs and do few calls to see the changes in the imported Grafana dashboard
 
-## Inspired by:
+## Resources:
  * https://dotnetos.org/blog/2021-11-22-dotnet-monitor-grafana/
  * https://habr.com/ru/company/sdventures/blog/653277/
+ * https://gist.github.com/shirhatti/ad7a986137d7ca6b1dc094a3e0a61a0d
 
 Memory apps was taken and upgraded from: https://github.com/sebastienros/memoryleak
 
