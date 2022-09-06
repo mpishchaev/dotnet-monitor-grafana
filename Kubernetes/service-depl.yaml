@@ -13,27 +13,36 @@ spec:
     metadata:
       labels:
         app: service-deployment
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: "52323"
     spec:
       volumes:
-        - name: memoryleak-temp          
+        - name: diagnostics       
           emptyDir: {}
-      shareProcessNamespace: true
+        - name: dumps
+          emptyDir: {}
+      #shareProcessNamespace: true
       containers:
         - name: service-memoryleak
           image: fenixvrn/memoryleak:latest
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: memoryleak-temp
-              mountPath: /tmp              
-        - name: sidecar-monitor
+            - name: diagnostics
+              mountPath: /tmp
+            - name: dumps
+              mountPath: /dumps              
+        - name: service-sidecar-monitor
           image: mcr.microsoft.com/dotnet/monitor:6
           ports:
             - containerPort: 52323
-          args: [ "-u http://*:52323", "--no-auth" ]
+          args: [ "--no-auth", "--urls", "http://*:52323"]
           volumeMounts:            
-            - name: memoryleak-temp
+            - name: diagnostics
               mountPath: /tmp
+            - name: dumps
+              mountPath: /dumps
 ---
 apiVersion: v1
 kind: Service

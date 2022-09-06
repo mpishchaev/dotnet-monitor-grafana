@@ -22,11 +22,13 @@ docker push <your_registry_name>/memoryleak
 ```
 
 ## Application launched by docker has following urls:
-  * Memory leaks application: http://localhost:8080/
-  * Dotnet monitor: http://localhost:52323
+  * Memory leaks application: http://localhost:8080/; http://localhost:8080/docs/ 
+  * Dotnet monitor: http://localhost:52323/metrics
     Here is the list of the endpoints in the monitor apps: https://github.com/dotnet/dotnet-monitor/tree/main/documentation
-  * Prometheus: http://localhost:9090/
+  * Prometheus: http://localhost:30090/ 
+    Here you can look for any metric from the monitor metrics
   * Grafana: http://localhost:3000/
+    Credentials by default is: admin/admin
 
 ## To see the results do following:
   * Open http://localhost:3000/ and login as admin/admin
